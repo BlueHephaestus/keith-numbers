@@ -136,13 +136,18 @@ def is_keith_number(n):
 
 d = int(sys.argv[1])#number of digits
 
-#Solve all ILPs asynchronously
-core_n = multiprocessing.cpu_count()
-ns = Parallel(n_jobs=core_n)(delayed(solve_ilp)(c) for c in get_ilp(d))
+if len(sys.argv) > 2 and sys.argv[2] == "parallel":
+    #Solve all ILPs asynchronously if parallel
+    core_n = multiprocessing.cpu_count()
+    ns = Parallel(n_jobs=core_n)(delayed(solve_ilp)(c) for c in get_ilp(d))
 
-#Print keith numbers found
-for n in ns:
-    n = int("".join(map(str, n)))#Number obtained
-    if is_keith_number(n):
-        print(n)
-
+    #Print keith numbers found
+    for n in ns:
+        n = int("".join(map(str, n)))#Number obtained
+        if is_keith_number(n):
+            print(n)
+else:
+    #Solve and print one at a time if not, allowing us to see progress easier
+    for c in get_ilp(d):
+        n = int("".join(map(str, solve_ilp(c))))#Number obtained
+        print(n, is_keith_number(n))
