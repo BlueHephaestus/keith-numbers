@@ -50,7 +50,7 @@ def get_ilp(d):
     """
 
     #Create repfib matrix
-    m = np.zeros((d,d))
+    m = np.zeros((d,d), dtype=np.uint64)
     m[-1,:] = np.ones((d,))
     m[:-1, 1:] = np.eye(d-1)
 
